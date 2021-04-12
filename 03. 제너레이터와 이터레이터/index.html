@@ -1,72 +1,141 @@
-<script>const log = console.log;</script>
+<script>
+	const log = console.log;
+</script>
 
-# 제너레이터/이터레이터
-- 제너레이터: 이터레이터이자 이터러블을 생성하는 함수
+# 제너레이터/이터레이터 - 제너레이터: 이터레이터이자 이터러블을 생성하는 함수
 
 <script>
-  function* gen() {
-    yield 1;
-    if (false) yield 2;
-    yield 3;
-  }
+	function* gen() {
+		yield 1;
+		if (false) yield 2;
+		yield 3;
+	}
 
-  let iter = gen();
-  log(iter[Symbol.iterator]() == iter);
-  log(iter.next());
-  log(iter.next());
-  log(iter.next());
-  log(iter.next());
+	let iter = gen();
+	log(iter[Symbol.iterator]() == iter);
+	log(iter.next());
+	log(iter.next());
+	log(iter.next());
+	log(iter.next());
 
-  for (const a of gen()) log(a);
-  console.clear();
+	for (const a of gen()) log(a);
+	console.clear();
 </script>
 
 # odds
 
 <script>
-  function* infinity(i = 0) {
-    while (true) yield i++;
-  }
+	function* infinity(i = 0) {
+		while (true) yield i++;
+	}
 
-  function* limit(l, iter) {
-    for (const a of iter) {
-      yield a;
-      if (a == l) return;
-    }
-  }
+	function* limit(l, iter) {
+		for (const a of iter) {
+			yield a;
+			if (a == l) return;
+		}
+	}
 
-  function* odds(l) {
-    for (const a of limit(l, infinity(1))) {
-      if (a % 2) yield a;
-    }
-  }
+	function* odds(l) {
+		for (const a of limit(l, infinity(1))) {
+			if (a % 2) yield a;
+		}
+	}
 
-  let iter2 = odds(10);
-  log(iter2.next());
-  log(iter2.next());
-  log(iter2.next());
-  log(iter2.next());
-  log(iter2.next());
-  log(iter2.next());
-  log(iter2.next());
+	let iter2 = odds(10);
+	log(iter2.next());
+	log(iter2.next());
+	log(iter2.next());
+	log(iter2.next());
+	log(iter2.next());
+	log(iter2.next());
+	log(iter2.next());
 
-  for (const a of odds(40)) log(a);
+	for (const a of odds(40)) log(a);
 
-  console.clear();
+	console.clear();
 </script>
 
 # for of, 전개 연산자, 구조 분해, 나머지 연산자
 
 <script>
-  log(...odds(10));
-  log([...odds(10), ...odds(20)]);
+	log(...odds(10));
+	log([...odds(10), ...odds(20)]);
 
-  const [head, ...tail] = odds(5);
-  log(head);
-  log(tail);
+	const [head, ...tail] = odds(5);
+	log(head);
+	log(tail);
 
-  const [a, b, ...rest] = odds(10);
-  log(a);
-  log(b);
-  log(rest);
+	const [a, b, ...rest] = odds(10);
+	log(a);
+	log(b);
+	log(rest);
+</script>
+
+<!-- 따라쳐보자 -->
+
+# 제네레이터/이터레이터 - 제네레이터 : 이터레이터이자 이터러블을 생성하는 함수
+
+<script>
+	function* gen() {
+		yield 1;
+		yield 2;
+		yield 3;
+		return 100; //done이 true가 될때 value값을 정해줌
+	}
+	//제네레이터를 통해 wellformed 이터레이터를 쉽게 생성할 수 있다
+	//제네레이터는 순회할 값을 문장으로 설명해줄 수 있음.
+	//자바스크립트에선 iterable은 순회를 할 수 있다.
+	//제네레이터는 값을 문장으로 만들수 있고 이것을 순환 시킬 수 있다.
+	//순회할수 있는 값을 만들 수 있다는 것은 어떠한 값도 조작할 수 있다는 뜻이고, 이를 통해 다형성을 확보 할 수 있다.
+
+	let iter = gen();
+	console.log(iter[Symbol.iterator]() == iter);
+	console.log(iter.next());
+	console.log(iter.next());
+	console.log(iter.next());
+	console.log(iter.next());
+</script>
+
+# odds
+<script>
+	function* infinity(i = 0) {
+		while (true) yield i++;
+	}
+
+	function* limit(l, iter) {
+		for (const a of iter) {
+			if (a % 2) yield i;
+			if (a == l) return;
+		}
+	}
+	function* odds(l) {
+		for (const a of limit(l, infinity(1))) {
+			if (a % 2) yield i;
+		}
+	}
+
+	let odd1 = odds();
+
+	console.log(odd1.next());
+	console.log(odd1.next());
+	console.log(odd1.next());
+	console.log(odd1.next());
+</script>
+
+# for of, 전개 연산자, 구조 분해, 나머지 연산자
+
+<script>
+	console.log(...odds(10));
+	console.log([...odds(10), ...odds(20)]);
+
+	const [head, ...tail] = odds(5);
+	console.log(head);
+	console.log(tail);
+
+	const [a, b, ...rest] = odds(10);
+	console.log(a);
+	console.log(b);
+	console.log(rest);
+	// 이터레이터나 이터레이블 프로토콜을 사용하면 조합성이 높은 프로그래밍을 할 수 있다.
 </script>
